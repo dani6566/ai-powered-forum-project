@@ -2,7 +2,6 @@ import express from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import { getDocumentChunksController } from "../controller/rag.controller.js";
 // ==========================================
 // Controllers & Validations (Imports)
 // ==========================================
@@ -74,6 +73,11 @@ const upload = multer({
 });
 
 // ==========================================
+// Routes
+// ==========================================
+
+
+// ==========================================
 // List Documents
 // GET /api/rag/documents
 // ==========================================
@@ -114,8 +118,6 @@ router.post(
   askDocumentAI
 );
 
-
-
 // ==========================================
 //  Delete Document with Validation (by documentId)
 // DELETE /api/rag/documents/:documentId
@@ -127,17 +129,11 @@ router.delete(
   deleteDocumentController,
 );
 
+// Get a document PDF file for the authenticated user
 router.get(
   "/documents/:documentId/file",
   authMiddleware,
   documentIdParamValidation,
   getDocumentFileController,
 );
-// GET /api/rag/documents/:documentId/chunks
-router.get(
-  '/documents/:documentId/chunks',
-  authMiddleware,
-  getDocumentChunksController
-);
-
 export default router;

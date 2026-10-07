@@ -75,13 +75,19 @@ export const authenticateUserAccount = async ({ email, password }) => {
   if (matchingUsers.length === 0) {
     throw new UnauthenticatedError("Invalid credentials provided.");
   }
+const account = matchingUsers[0];
 
-  const account = matchingUsers[0];
-  const isPasswordValid = await bcrypt.compare(password, account.password_hash);
 
-  if (!isPasswordValid) {
-    throw new UnauthenticatedError("Invalid credentials provided.");
-  }
+const isPasswordValid = await bcrypt.compare(
+  password,
+  account.password_hash,
+);
+
+console.log("PASSWORD VALID:", isPasswordValid);
+
+if (!isPasswordValid) {
+  throw new UnauthenticatedError("Invalid credentials provided.");
+}
 
   const tokenPayload = {
     id: account.user_id,
