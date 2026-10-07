@@ -167,7 +167,7 @@ export const getSimilarQuestionsService = async ({
 }) => {
   // 1. Fetch current question vector
   const sourceResult = await safeExecute(
-    `SELECT qv.question_id, qv.embedding
+    `SELECT qv.question_id, qv.embedding_vector
      FROM question_vectors qv
      JOIN questions q ON qv.question_id = q.question_id
      WHERE q.question_hash = ?`,
@@ -204,7 +204,7 @@ export const getSimilarQuestionsService = async ({
 
   // 2. Fetch target question vectors
   const targetResult = await safeExecute(
-    `SELECT qv.question_id, qv.embedding
+    `SELECT qv.question_id, qv.embedding_vector
      FROM question_vectors qv
      WHERE qv.question_id != ? AND qv.status = 'ready'`,
     [sourceQuestionId],
