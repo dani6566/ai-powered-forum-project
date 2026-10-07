@@ -77,10 +77,6 @@ export const authenticateUserAccount = async ({ email, password }) => {
   }
 const account = matchingUsers[0];
 
-console.log("LOGIN EMAIL:", formattedEmail);
-console.log("USER FOUND:", account);
-console.log("PASSWORD RECEIVED:", password);
-console.log("PASSWORD HASH EXISTS:", !!account.password_hash);
 
 const isPasswordValid = await bcrypt.compare(
   password,
