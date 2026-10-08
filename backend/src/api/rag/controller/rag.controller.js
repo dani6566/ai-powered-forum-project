@@ -151,9 +151,8 @@ export const askDocumentAI = async (req, res) => {
 
 
 
-
 // ==========================================
-// Get PDF File (For Interactive Viewer)
+// Get Document File (PDF / TXT)
 // ==========================================
 
 export const getDocumentFileController = async (req, res, next) => {
@@ -165,7 +164,6 @@ export const getDocumentFileController = async (req, res, next) => {
       userId: req.user.id,
     });
 
-    res.setHeader("Content-Type", "application/pdf");
     res.setHeader(
       "Content-Disposition",
       `inline; filename="${filename}"`,
