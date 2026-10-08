@@ -281,8 +281,23 @@ export default function RagFeaturesSection({
                         >
                           <span className={styles.resultChunkTitle}>
                             Result {index + 1}
+                            {result.pageStart && (
+                              <span
+                                style={{
+                                  fontSize: "0.85rem",
+                                  opacity: 0.8,
+                                  marginLeft: "8px",
+                                }}
+                              >
+                                (Page {result.pageStart}
+                                {result.pageEnd &&
+                                result.pageEnd !== result.pageStart
+                                  ? ` - ${result.pageEnd}`
+                                  : ""}
+                                )
+                              </span>
+                            )}
                           </span>
-
                           <div className={styles.chatHeaderButtons}>
                             <span
                               className={
