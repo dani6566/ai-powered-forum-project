@@ -13,13 +13,24 @@ import {
   FileText,
   Database,
   PlayCircle,
+  LogOut,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import styles from "./Landing.module.css";
 
 export default function Landing() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { currentUser, isAuthenticated, logoutUser } = useAuth();
+  const firstName = currentUser?.firstName || currentUser?.first_name || "";
+  const lastName = currentUser?.lastName || currentUser?.last_name || "";
+  const userName =
+    `${firstName} ${lastName}`.trim() ||
+    currentUser?.name ||
+    currentUser?.email ||
+    "User";
+  const avatarInitials =
+    `${firstName[0] || ""}${lastName[0] || ""}`.toUpperCase() ||
+    userName[0].toUpperCase();
   // holds a reference to the input DOM node (no re-render on change)
   // useRef  Smooth Scrolling
   const howItWorksRef = useRef(null);
@@ -84,14 +95,30 @@ export default function Landing() {
 
           <div className={styles.authButtons}>
             {isAuthenticated ? (
-              <button
-                type="button"
-                className={styles.btnPrimary}
-                onClick={() => navigate("/dashboard")}
-              >
-                Open forum
-                <ArrowRight size={16} aria-hidden />
-              </button>
+              <>
+                <div className={styles.userProfile} aria-label={`Signed in as ${userName}`}>
+                  <span className={styles.userAvatar} aria-hidden="true">
+                    {avatarInitials}
+                  </span>
+                  <span className={styles.userName}>{userName}</span>
+                </div>
+                <button
+                  type="button"
+                  className={styles.btnPrimary}
+                  onClick={() => navigate("/dashboard")}
+                >
+                  Open forum
+                  <ArrowRight size={16} aria-hidden />
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.btnGhost} ${styles.signOutButton}`}
+                  onClick={logoutUser}
+                >
+                  <LogOut size={16} aria-hidden />
+                  Sign out
+                </button>
+              </>
             ) : (
               <>
                 <button
