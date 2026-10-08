@@ -64,7 +64,7 @@ Return ONLY valid JSON using exactly this format:
   "feedback": "short helpful feedback",
   "suggestions": [
     "suggestion 1",
-    "suggestion 2",
+    "suggestion 2"
   ],
   "improvedTitle": "a clearer, more specific version of the title",
   "improvedContent": "a rewritten version of the question content that applies your suggestions"
