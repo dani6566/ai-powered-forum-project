@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import styles from "./knowledgeBase.module.css";
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3777';
 
 export default function RagFeaturesSection({
   selectedDoc,
@@ -103,7 +104,7 @@ export default function RagFeaturesSection({
                 )
               ) : (
                 <iframe
-                  src={`http://localhost:5000/api/rag/documents/${selectedDoc.documentId}/file?token=${encodeURIComponent(
+                  src={`${API_URL}/api/rag/documents/${selectedDoc.documentId}/file?token=${encodeURIComponent(
                     token,
                   )}`}
                   title={selectedDoc.title}
@@ -253,9 +254,8 @@ export default function RagFeaturesSection({
                   {searchResults.map((result, index) => {
                     const chunkIdx = result.chunkIndex ?? index;
 
-                    const chunkKey = `${
-                      result.documentId || selectedDoc?.documentId || "doc"
-                    }-${chunkIdx}`;
+                    const chunkKey = `${result.documentId || selectedDoc?.documentId || "doc"
+                      }-${chunkIdx}`;
 
                     const isSelected =
                       selectedResult?.chunkId === result.chunkId ||
@@ -291,7 +291,7 @@ export default function RagFeaturesSection({
                               >
                                 (Page {result.pageStart}
                                 {result.pageEnd &&
-                                result.pageEnd !== result.pageStart
+                                  result.pageEnd !== result.pageStart
                                   ? ` - ${result.pageEnd}`
                                   : ""}
                                 )
@@ -489,11 +489,10 @@ export default function RagFeaturesSection({
                                   if (matchingResult) {
                                     setSelectedResult(matchingResult);
 
-                                    const matchKey = `${
-                                      matchingResult.documentId ||
+                                    const matchKey = `${matchingResult.documentId ||
                                       selectedDoc?.documentId ||
                                       "doc"
-                                    }-${sChunkIdx}`;
+                                      }-${sChunkIdx}`;
 
                                     setExpandedChunks((prev) => ({
                                       ...prev,

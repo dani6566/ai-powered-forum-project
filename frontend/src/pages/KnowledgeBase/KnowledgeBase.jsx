@@ -373,9 +373,8 @@ export default function KnowledgeBase() {
   const handleSelectResult = (result) => {
     const chunkIdx = result.chunkIndex ?? null;
 
-    const chunkKey = `${
-      result.documentId || selectedDoc?.documentId || "doc"
-    }-${chunkIdx}`;
+    const chunkKey = `${result.documentId || selectedDoc?.documentId || "doc"
+      }-${chunkIdx}`;
 
     setSelectedResult(result);
 
@@ -414,6 +413,7 @@ export default function KnowledgeBase() {
         setSearchResults([]);
       } else {
         const results = res.data?.results || [];
+        console.log("Results", results);
 
         setSearchResults(results);
         setSearchMessage("");
@@ -421,9 +421,8 @@ export default function KnowledgeBase() {
         if (results.length > 0) {
           setSelectedResult(results[0]);
 
-          const firstChunkKey = `${
-            results[0].documentId || selectedDoc?.documentId || "doc"
-          }-${results[0].chunkIndex ?? 0}`;
+          const firstChunkKey = `${results[0].documentId || selectedDoc?.documentId || "doc"
+            }-${results[0].chunkIndex ?? 0}`;
 
           setExpandedChunks({
             [firstChunkKey]: true,
@@ -600,9 +599,8 @@ export default function KnowledgeBase() {
     let markdownContent = `# Knowledge Base AI Chat Export\n\n`;
 
     chatMessages.forEach((msg) => {
-      markdownContent += `### ${
-        msg.role === "user" ? "You" : "AI Assistant"
-      }\n${msg.content}\n\n`;
+      markdownContent += `### ${msg.role === "user" ? "You" : "AI Assistant"
+        }\n${msg.content}\n\n`;
     });
 
     const blob = new Blob([markdownContent], {
