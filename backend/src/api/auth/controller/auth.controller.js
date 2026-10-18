@@ -10,7 +10,7 @@ import {
 export const handleUserRegistration = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
-    const createdUser = await createNewUserAccount({
+    const { accessToken } = await createNewUserAccount({
       firstName,
       lastName,
       email,
@@ -19,7 +19,7 @@ export const handleUserRegistration = async (req, res, next) => {
     res.status(StatusCodes.CREATED).json({
       success: true,
       message: "User account created successfully.",
-      user: createdUser,
+      token: accessToken,
     });
   } catch (error) {
     next(error);
@@ -30,14 +30,13 @@ export const handleUserRegistration = async (req, res, next) => {
 export const handleUserLogin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    const { user, accessToken } = await authenticateUserAccount({
+    const { accessToken } = await authenticateUserAccount({
       email,
       password,
     });
     res.status(StatusCodes.OK).json({
       success: true,
       message: "Authentication successful.",
-      user,
       token: accessToken,
     });
   } catch (error) {

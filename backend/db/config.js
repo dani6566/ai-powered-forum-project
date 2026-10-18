@@ -1,3 +1,4 @@
+
 import dotenv from "dotenv";
 dotenv.config();
 import mysql from "mysql2/promise";
@@ -14,6 +15,7 @@ export const db = mysql.createPool({
     rejectUnauthorized: true
   }
 });
+
 
 const ensureParams = (params) => {
   if (params === undefined || params === null) {

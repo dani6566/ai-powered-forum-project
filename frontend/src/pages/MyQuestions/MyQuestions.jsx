@@ -17,6 +17,8 @@ export default function MyQuestions() {
   const [myQuestions, setMyQuestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   // Fetch the user's questions when the component mounts
   useEffect(() => {
@@ -32,6 +34,7 @@ export default function MyQuestions() {
           ? await searchQuestionsSemantic({ query: semantic, mine: true })
           : await getQuestions({ mine: true, ...(search ? { search } : {}) });
         setMyQuestions(result.data || []);
+        setCurrentPage(1);
       } catch (err) {
         setError(
           err.response?.data?.message || "Failed to load your questions.",
@@ -43,6 +46,13 @@ export default function MyQuestions() {
 
     fetchMyQuestions();
   }, [location.search]);
+
+  const totalPages = Math.max(1, Math.ceil(myQuestions.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedQuestions = myQuestions.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
 
   const getInitials = () => {
     const firstName = currentUser?.firstName || "";
@@ -102,41 +112,68 @@ export default function MyQuestions() {
             </button>
           </div>
         ) : (
-          <div className={styles.questionList}>
-            {myQuestions.map((question) => (
-              <article
-                key={question.id}
-                className={styles.questionCard}
-                // onClick={() => navigate(`/question/${question.questionHash}`)}
-                onClick={() => navigate(`/question/${question.questionHash}`)}
-              >
-                <div className={styles.leftAccent} />
+          <>
+            <div className={styles.questionList}>
+              {paginatedQuestions.map((question) => (
+                <article
+                  key={question.id}
+                  className={styles.questionCard}
+                  onClick={() => navigate(`/question/${question.questionHash}`)}
+                >
+                  <div className={styles.leftAccent} />
 
-                <div className={styles.avatar}>{getInitials()}</div>
+                  <div className={styles.avatar}>{getInitials()}</div>
 
-                <div className={styles.questionContent}>
-                  <h3 className={styles.questionTitle}>{question.title}</h3>
+                  <div className={styles.questionContent}>
+                    <h3 className={styles.questionTitle}>{question.title}</h3>
 
-                  <p className={styles.questionExcerpt}>{question.content}</p>
+                    <p className={styles.questionExcerpt}>{question.content}</p>
 
-                  <div className={styles.questionMeta}>
-                    <span>
-                      <MessageSquare size={14} />
-                      {question.answerCount || 0} replies
-                    </span>
+                    <div className={styles.questionMeta}>
+                      <span>
+                        <MessageSquare size={14} />
+                        {question.answerCount || 0} replies
+                      </span>
 
-                    <span>
-                      {new Date(question.createdAt).toLocaleDateString()}
-                    </span>
+                      <span>
+                        {new Date(question.createdAt).toLocaleDateString()}
+                      </span>
 
-                    <span>by You</span>
+                      <span>by You</span>
+                    </div>
                   </div>
-                </div>
 
-                <span className={styles.yoursBadge}>YOURS</span>
-              </article>
-            ))}
-          </div>
+                  <span className={styles.yoursBadge}>YOURS</span>
+                </article>
+              ))}
+            </div>
+
+            {myQuestions.length > pageSize && (
+              <div className={styles.pagination}>
+                <button
+                  type="button"
+                  className={styles.pageButton}
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={safeCurrentPage === 1}
+                >
+                  Previous
+                </button>
+
+                <span className={styles.pageInfo}>
+                  Page {safeCurrentPage} of {totalPages}
+                </span>
+
+                <button
+                  type="button"
+                  className={styles.pageButton}
+                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                  disabled={safeCurrentPage === totalPages}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
     </div>

@@ -11,6 +11,12 @@ const apiClient = axios.create({
   },
 });
 
+let onUnauthorized;
+
+export const setUnauthorizedHandler = (handler) => {
+  onUnauthorized = handler;
+};
+
 /**
  * Request interceptor to attach the JWT token to headers.
  */
@@ -46,8 +52,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !isAuthEndpoint) {
       localStorage.removeItem("authToken");
       localStorage.removeItem("activeUser");
-
-      window.location.href = "/auth";
+      onUnauthorized?.();
     }
 
     return Promise.reject(error);

@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 // import uploadRouter from "./src/api/uploads/router.js"; // NEW: image upload route
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3777;
 
 // Middleware
 app.use(cors());

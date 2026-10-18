@@ -152,12 +152,13 @@ export const processDocument = async ({ userId, file }) => {
           INSERT INTO document_chunk_vectors
           (
             chunk_id,
+            source_text,
             embedding_vector,
             status
           )
-          VALUES (?, ?, ?)
+          VALUES (?, ?, ?, ?)
         `,
-        [chunkId, embeddingVectorJson, "ready"],
+        [chunkId, chunkContent, embeddingVectorJson, "ready"],
       );
     }
 

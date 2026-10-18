@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/auth/auth.service.js';
+import { setUnauthorizedHandler } from '../services/core/api.client.js';
 
 const AuthContext = createContext(undefined);
 
@@ -9,6 +10,18 @@ export function AuthProvider({ children }) {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [authError, setAuthError] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setUnauthorizedHandler(() => {
+      setCurrentUser(null);
+      setAuthError(null);
+      navigate('/auth', { replace: true });
+    });
+
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [navigate]);
 
   // Runs once on mount: was there already a session saved from a previous
   // visit? If so, confirm it against the backend rather than trusting
@@ -39,6 +52,7 @@ export function AuthProvider({ children }) {
     setAuthError(null);
     try {
       const result = await authService.registerAccount(data);
+      setCurrentUser(result.user);
       return { success: true, user: result.user };
     } catch (err) {
       const errorMsg = err.message || 'Registration failed. Please try again.';

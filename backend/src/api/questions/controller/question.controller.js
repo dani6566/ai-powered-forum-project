@@ -74,7 +74,6 @@ export const generateQuestionDraftCoachController = async (req, res, next) => {
  */
 export const getQuestionsController = async (req, res, next) => {
   try {
-    console.log("Fetching questions with query:", req.query);
     const { search, mine } = req.query;
     const userId = req.user.id;
 

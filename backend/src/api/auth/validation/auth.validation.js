@@ -14,7 +14,7 @@ export const validateUserRegistration = [
   // Express validator field chains
   (req, res, next) => {
     const { firstName, lastName, email, password } = req.body;
-    if (!firstName || firstName.trim().length < 3) {
+    if (!firstName || firstName.trim().length < 1) {
       throw new BadRequestError(
         "First name is required and must be at least 3 characters.",
       );

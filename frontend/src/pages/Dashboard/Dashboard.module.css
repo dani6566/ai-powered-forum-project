@@ -276,6 +276,35 @@
   gap: 4px;
 }
 
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 16px 28px;
+  border-top: 1px solid var(--border);
+}
+
+.pageButton {
+  border: 1px solid var(--border);
+  background: var(--surface-container-low);
+  color: var(--text-primary);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pageButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 @media (max-width: 700px) {
   .dashboard {
     padding: 24px 16px;

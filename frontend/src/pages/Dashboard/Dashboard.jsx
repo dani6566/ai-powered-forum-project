@@ -11,9 +11,10 @@ export default function Dashboard() {
   const location = useLocation();
 
   const [questions, setQuestions] = useState([]);
-  console.log("questions", questions)
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchQuestions = async () => {
@@ -35,6 +36,7 @@ export default function Dashboard() {
           data = result.data;
         }
         setQuestions(data);
+        setCurrentPage(1);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load questions.');
       } finally {
@@ -44,6 +46,13 @@ export default function Dashboard() {
 
     fetchQuestions();
   }, [location.search]);
+
+  const totalPages = Math.max(1, Math.ceil(questions.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, totalPages);
+  const paginatedQuestions = questions.slice(
+    (safeCurrentPage - 1) * pageSize,
+    safeCurrentPage * pageSize,
+  );
 
   const firstName = user?.firstName?.trim();
   const welcomeLine = firstName
@@ -154,42 +163,69 @@ export default function Dashboard() {
               </div>
             </div>
           ) : (
-            <div className={styles.questionList}>
-
-              {questions.map((q) => {
-                const isMine = q.author?.id === user?.id;
-                const excerpt = q.content ? q.content.substring(0, 100) + '...' : '';
-                const authorName = [q.author?.firstName, q.author?.lastName]
-                  .filter(Boolean)
-                  .join(' ') || 'Unknown user';
-                return (
-                  <div
-                    key={q.id}
-                    className={`${styles.questionCard} ${isMine ? styles.myQuestion : ''}`}
-                    onClick={() => navigate(`/question/${q.questionHash}`)}
-                  >
-                    <div className={styles.avatar}>
-                      {q.author?.firstName?.charAt(0) || 'U'}{q.author?.lastName?.charAt(0) || ''}
-                    </div>
-
-                    <div className={styles.questionContent}>
-                      <div className={styles.questionTitle}>{q.title}</div>
-                      <div className={styles.questionExcerpt}>{excerpt}</div>
-                      <div className={styles.questionMeta}>
-                        <span>
-                          <MessageSquare size={14} /> {q.answerCount || 0} replies
-                        </span>
-                        <span>
-                          {new Date(q.createdAt).toLocaleDateString()} by {isMine ? 'you' : authorName}
-                        </span>
+            <>
+              <div className={styles.questionList}>
+                {paginatedQuestions.map((q) => {
+                  const isMine = q.author?.id === user?.id;
+                  const excerpt = q.content ? q.content.substring(0, 100) + '...' : '';
+                  const authorName = [q.author?.firstName, q.author?.lastName]
+                    .filter(Boolean)
+                    .join(' ') || 'Unknown user';
+                  return (
+                    <div
+                      key={q.id}
+                      className={`${styles.questionCard} ${isMine ? styles.myQuestion : ''}`}
+                      onClick={() => navigate(`/question/${q.questionHash}`)}
+                    >
+                      <div className={styles.avatar}>
+                        {q.author?.firstName?.charAt(0) || 'U'}{q.author?.lastName?.charAt(0) || ''}
                       </div>
-                    </div>
 
-                    {isMine && <span className={styles.yoursBadge}>YOURS</span>}
-                  </div>
-                );
-              })}
-            </div>
+                      <div className={styles.questionContent}>
+                        <div className={styles.questionTitle}>{q.title}</div>
+                        <div className={styles.questionExcerpt}>{excerpt}</div>
+                        <div className={styles.questionMeta}>
+                          <span>
+                            <MessageSquare size={14} /> {q.answerCount || 0} replies
+                          </span>
+                          <span>
+                            {new Date(q.createdAt).toLocaleDateString()} by {isMine ? 'you' : authorName}
+                          </span>
+                        </div>
+                      </div>
+
+                      {isMine && <span className={styles.yoursBadge}>YOURS</span>}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {questions.length > pageSize && (
+                <div className={styles.pagination}>
+                  <button
+                    type="button"
+                    className={styles.pageButton}
+                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                    disabled={safeCurrentPage === 1}
+                  >
+                    Previous
+                  </button>
+
+                  <span className={styles.pageInfo}>
+                    Page {safeCurrentPage} of {totalPages}
+                  </span>
+
+                  <button
+                    type="button"
+                    className={styles.pageButton}
+                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                    disabled={safeCurrentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

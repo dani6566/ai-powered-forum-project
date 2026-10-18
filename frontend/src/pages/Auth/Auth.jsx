@@ -63,19 +63,16 @@ export default function Auth() {
 
     const [localError, setLocalError] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [authSuccessNotice, setAuthSuccessNotice] = useState(null);
 
     const toggleAuthMode = () => {
         setIsSignInMode(prev => !prev);
         setLocalError(null);
-        setAuthSuccessNotice(null);
         clearAuthError();
     };
 
     const handleAuthSubmit = async e => {
         e.preventDefault();
         setLocalError(null);
-        setAuthSuccessNotice(null);
         clearAuthError();
 
         const cleanEmail = emailInput.trim().toLowerCase();
@@ -105,10 +102,8 @@ export default function Auth() {
             if (isSignInMode) {
                 const response = await signin({ email: cleanEmail, password: passInput });
                 if (response?.success) {
-                    setAuthSuccessNotice('Sign-in successful. Redirecting...');
                     setPassInput('');
 
-                    await new Promise(res => setTimeout(res, 800));
                     const targetPath = location.state?.from?.pathname || '/dashboard';
                     navigate(targetPath, { replace: true });
                 }
@@ -121,14 +116,10 @@ export default function Auth() {
                 });
 
                 if (response?.success) {
-                    setAuthSuccessNotice('Account created successfully! Switching to sign in...');
                     setFnameInput('');
                     setLnameInput('');
-
-                    setTimeout(() => {
-                        setIsSignInMode(true);
-                        setAuthSuccessNotice(null);
-                    }, 1500);
+                    setPassInput('');
+                    navigate('/dashboard', { replace: true });
                 }
             }
         } catch (err) {
@@ -303,7 +294,6 @@ export default function Auth() {
                                     </div>
                                 )}
 
-                                {authSuccessNotice && <div className={styles.successNotification}>{authSuccessNotice}</div>}
                                 {displayedError && <div className={styles.errorNotification}>{displayedError}</div>}
 
                                 <div className={styles.submitActionContainer}>

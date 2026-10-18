@@ -2,10 +2,14 @@ import { apiClient } from "../core/api.client.js";
 
 async function registerAccount(formData) {
   try {
-    clearSessionData(); 
+    clearSessionData();
     const res = await apiClient.post("/api/auth/register", formData);
-    return { user: res.data.user };
+    const token = res.data.token;
+    saveAuthToken(token);
+    const user = await verifyActiveSession();
+    return { user, token };
   } catch (err) {
+    clearSessionData();
     throw parseAuthException(err);
   }
 }
@@ -17,22 +21,30 @@ async function loginAccount(credentials) {
     const res = await apiClient.post("/api/auth/login", credentials);
 
     const token = res.data.accessToken || res.data.token;
-    const user = res.data.user;
+    let user;
 
     if (token) {
       localStorage.setItem("authToken", token);
       apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
 
-    if (user) {
-      localStorage.setItem("activeUser", JSON.stringify(user));
+    if (!token) {
+      throw new Error("Authentication response did not include an access token.");
     }
-
+    user = await verifyActiveSession();
     return { user, token };
   } catch (err) {
     clearSessionData();
     throw parseAuthException(err);
   }
+}
+
+function saveAuthToken(token) {
+  if (!token) {
+    throw new Error("Authentication response did not include an access token.");
+  }
+
+  localStorage.setItem("authToken", token);
 }
 
 async function verifyActiveSession() {
@@ -76,6 +88,9 @@ function retrieveCachedUser() {
 
 function parseAuthException(error) {
   if (!error.response) {
+    if (!error.isAxiosError) {
+      return error;
+    }
     return new Error("Server connection failed. Please check your network.");
   }
 

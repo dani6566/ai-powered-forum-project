@@ -1718,36 +1718,34 @@
 /* Search Result Card Background & Text */
 .searchResultCard,
 .searchResultCardSelected {
-  background-color: #1e293b; /* Darker navy/slate background for contrast */
-  border: 1px solid #334155;
-  color: #f8fafc; /* Bright white text so it's fully visible */
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
 }
 
-/* Card Selected Highlight Border */
 .searchResultCardSelected {
-  border-color: #3b82f6; /* Accent blue border */
-  box-shadow: 0 0 0 1px #3b82f6;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
 }
 
-/* Markdown/Retrieved Content Inside Results */
 .searchResultContent,
 .retrievedContent,
 .markdownContent {
-  color: #e2e8f0 !important; /* Soft white/light gray text */
+  color: var(--text-secondary) !important;
   line-height: 1.6;
 }
 
-/* Titles inside Markdown (h1, h2, h3, strong) */
 .markdownContent h1,
 .markdownContent h2,
 .markdownContent h3,
 .markdownContent h4,
 .markdownContent strong {
-  color: #ffffff !important; /* Pure white for headers/bold text */
+  color: var(--text-primary) !important;
 }
+
 .resultHeader {
   display: flex;
   justify-content: space-between;
@@ -1772,38 +1770,35 @@
   font-size: calc(var(--text-xs) - 1px);
   color: var(--text-tertiary);
 }
-/* 1. Selected Result Panel */
+
 .selectedResultPanel {
-  background-color: #0f172a !important; /* Deep dark Slate Background */
-  border: 1px solid #1e293b;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 20px;
   margin-top: 16px;
-  color: #f1f5f9;
+  color: var(--text-primary);
 }
 
-/* 2.  Retrived Content Card */
 .retrievedContent {
-  background-color: #1e293b !important; /*  Slate/Navy Background */
-  border: 1px solid #334155;
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 16px;
   margin-top: 10px;
-  color: #f8fafc !important; 
+  color: var(--text-primary) !important;
 }
 
-/* 3. Search Result Cards */
 .searchResultCard,
 .searchResultCardSelected {
-  background-color: #1e293b !important;
-  border: 1px solid #334155;
+  background-color: var(--surface-container-low) !important;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
-  color: #f8fafc !important;
+  color: var(--text-primary) !important;
 }
 
-/* 4. Inside Content Text & Headings  */
 .retrievedContent p,
 .retrievedContent span,
 .retrievedContent div,
@@ -1822,11 +1817,10 @@
 .markdownContent li,
 .markdownContent td,
 .markdownContent th {
-  color: #e2e8f0 !important; /*Light Slate Gray Text */
+  color: var(--text-secondary) !important;
   line-height: 1.6;
 }
 
-/* 5. Bold & Headings Text */
 .retrievedContent h1,
 .retrievedContent h2,
 .retrievedContent h3,
@@ -1834,10 +1828,11 @@
 .retrievedContent strong,
 .searchResultCard strong,
 .markdownContent strong {
-  color: #ffffff !important; 
+  color: var(--text-primary) !important;
 }
+
 .documentInformation {
-  color: #94a3b8; /* Muted slate gray for meta text */
+  color: var(--text-tertiary);
 }
 
 .selectedResultHeader {
@@ -1960,8 +1955,8 @@
 }
 
 .assistantChatMessage {
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background: var(--surface-container-low);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
 }
 
@@ -2019,17 +2014,16 @@
 .aiQuestionForm .inputGroup {
   margin-bottom: 12px;
 }
-/* AI Chat Assistant Response Box */
+
 .assistantChatMessage {
-  background-color: #f8fafc !important; /* Soft light background */
-  border: 1px solid #e2e8f0;
+  background-color: var(--surface-container-low) !important;
+  border: 1px solid var(--border);
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 12px;
-  color: #0f172a !important; 
+  color: var(--text-primary) !important;
 }
 
-/* AI response inside markdown text */
 .assistantChatMessage p,
 .assistantChatMessage span,
 .assistantChatMessage div,
@@ -2037,13 +2031,12 @@
 .chatMarkdownContent p,
 .chatMarkdownContent span,
 .chatMarkdownContent div {
-  color: #1e293b !important; /* Dark Slate text for crisp readability */
+  color: var(--text-primary) !important;
   line-height: 1.6;
 }
 
-/* Disabled or placeholder response text (For missing resources) */
 .assistantChatMessage {
-  opacity: 1 !important; 
+  opacity: 1 !important;
 }
 
 /* ==========================================
@@ -2181,18 +2174,18 @@
 ========================================== */
 .tabContainer {
   width: 100%;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
   margin-top: 16px;
 }
 
 .tabHeader {
   display: flex;
-  background-color: #f8fafc;
-  border-bottom: 1px solid #e2e8f0;
+  background-color: var(--surface-container-low);
+  border-bottom: 1px solid var(--border);
 }
 
 .tabButton {
@@ -2206,26 +2199,26 @@
   background: transparent;
   font-size: 14px;
   font-weight: 600;
-  color: #64748b;
+  color: var(--text-tertiary);
   cursor: pointer;
   transition: all 0.2s ease;
   border-bottom: 2px solid transparent;
 }
 
 .tabButton:hover {
-  color: #1e293b;
-  background-color: #f1f5f9;
+  color: var(--text-primary);
+  background-color: var(--surface-hover);
 }
 
 .activeTab {
-  color: #ea580c;
-  background-color: #ffffff;
-  border-bottom: 2px solid #ea580c;
+  color: var(--primary-hover);
+  background-color: var(--surface);
+  border-bottom: 2px solid var(--primary);
 }
 
 .tabBadge {
-  background-color: #ffedd5;
-  color: #c2410c;
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
   font-size: 11px;
   font-weight: 700;
   padding: 2px 8px;

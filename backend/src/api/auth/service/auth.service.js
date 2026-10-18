@@ -15,6 +15,8 @@ if (!JWT_SECRET) {
 }
 
 const cleanEmailInput = (rawEmail) => rawEmail.trim().toLowerCase();
+const createAccessToken = (userId) =>
+  jwt.sign({ id: userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 
 // Check whether an email is already used by an account.
 export const isEmailAlreadyRegistered = async (userEmail) => {
@@ -58,11 +60,16 @@ export const createNewUserAccount = async ({
     throw err;
   }
 
-  return {
+  const user = {
     id: queryResult.insertId,
     firstName,
     lastName,
     email: formattedEmail,
+  };
+
+  return {
+    user,
+    accessToken: createAccessToken(user.id),
   };
 };
 
@@ -75,40 +82,14 @@ export const authenticateUserAccount = async ({ email, password }) => {
   if (matchingUsers.length === 0) {
     throw new UnauthenticatedError("Invalid credentials provided.");
   }
-const account = matchingUsers[0];
+  const account = matchingUsers[0];
+  const isPasswordValid = await bcrypt.compare(password, account.password_hash);
 
+  if (!isPasswordValid) {
+    throw new UnauthenticatedError("Invalid credentials provided.");
+  }
 
-const isPasswordValid = await bcrypt.compare(
-  password,
-  account.password_hash,
-);
-
-console.log("PASSWORD VALID:", isPasswordValid);
-
-if (!isPasswordValid) {
-  throw new UnauthenticatedError("Invalid credentials provided.");
-}
-
-  const tokenPayload = {
-    id: account.user_id,
-    email: account.email,
-    firstName: account.first_name,
-    lastName: account.last_name,
-  };
-
-  const accessToken = jwt.sign(tokenPayload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRES_IN,
-  });
-
-  return {
-    user: {
-      id: account.user_id,
-      firstName: account.first_name,
-      lastName: account.last_name,
-      email: account.email,
-    },
-    accessToken,
-  };
+  return { accessToken: createAccessToken(account.user_id) };
 };
 
 // Fetch the public profile fields for a user.

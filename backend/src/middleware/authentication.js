@@ -31,12 +31,8 @@ if (authHeader && authHeader.startsWith("Bearer ")) {
   try {
     const decodedPayload = jwt.verify(token, JWT_SECRET);
 
-    // Attach user information to request object
     req.user = {
       id: decodedPayload.id,
-      email: decodedPayload.email,
-      firstName: decodedPayload.firstName,
-      lastName: decodedPayload.lastName,
     };
 
     next();
@@ -61,9 +57,6 @@ export const optionalAuth = (req, res, next) => {
       const decodedPayload = jwt.verify(token, JWT_SECRET);
       req.user = {
         id: decodedPayload.id,
-        email: decodedPayload.email,
-        firstName: decodedPayload.firstName,
-        lastName: decodedPayload.lastName,
       };
     } catch (error) {
     }

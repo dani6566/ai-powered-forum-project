@@ -56,7 +56,7 @@ CREATE TABLE `question_vectors` (
     `vector_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `question_id` INT NOT NULL,
     `source_text` TEXT NOT NULL, -- Text used to generate the embedding
-    `embedding` JSON NOT NULL,   -- Gemini embedding vector
+    `embedding_vector` JSON NOT NULL,   -- Gemini embedding vector
     `status` VARCHAR(20) DEFAULT 'ready', -- e.g., 'ready', 'pending', 'failed'
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -92,9 +92,9 @@ DROP TABLE IF EXISTS `documents`;
 CREATE TABLE `documents` (
     `document_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
-    `title` VARCHAR(512) NOT NULL,
+    `filename` VARCHAR(512) NOT NULL,
     `mime_type` VARCHAR(128) NOT NULL DEFAULT 'application/pdf',
-    `storage_path` VARCHAR(1024) NOT NULL,
+    `file_path` VARCHAR(1024) NOT NULL,
     `byte_size` BIGINT NOT NULL DEFAULT 0,
     `status` VARCHAR(20) NOT NULL DEFAULT 'pending',
     `error_message` TEXT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE `document_chunk_vectors` (
     `chunk_vector_id` BIGINT AUTO_INCREMENT PRIMARY KEY,
     `chunk_id` BIGINT NOT NULL,
     `source_text` TEXT NOT NULL,
-    `embedding` JSON NOT NULL,
+    `embedding_vector` JSON NOT NULL,
     `status` VARCHAR(20) NOT NULL DEFAULT 'ready',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
