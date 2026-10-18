@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
+import { apiClient } from "../../services/core/api.client.js";
 
 import {
   WandSparkles,
@@ -21,7 +22,7 @@ import {
 } from "lucide-react";
 
 import styles from "./knowledgeBase.module.css";
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3777';
+const API_URL = apiClient.defaults.baseURL.replace(/\/+$/, "");
 
 export default function RagFeaturesSection({
   selectedDoc,
